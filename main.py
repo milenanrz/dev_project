@@ -97,9 +97,18 @@ async def change_state(photographer_id:int, session:Session=Depends(get_session)
     return photographer
 
 #filter genre
-@app.get("/photographers/{photographer_genre}", response_model=PhotographerSQL, tags=["PHOTOGRAPHERS"])
+@app.get("/photographers_genre_filter/{photographer_genre}", response_model=list[PhotographerSQL], tags=["PHOTOGRAPHERS"])
 async def get_photographer_genre(photographer_genre:Genre, session:Session=Depends(get_session)):
     photographer = await crud.filter_genre(session, photographer_genre)
+    if photographer is None:
+        raise HTTPException(status_code=404, detail="Photographer not found")
+    return photographer
+
+
+#filter nationality
+@app.get("/photographers_nationality_filter/{photographer_nationality}", response_model=list[PhotographerSQL], tags=["PHOTOGRAPHERS"])
+async def get_photographer_nationality(photographer_nationality:Nationality, session:Session=Depends(get_session)):
+    photographer = await crud.filter_nationality(session, photographer_nationality)
     if photographer is None:
         raise HTTPException(status_code=404, detail="Photographer not found")
     return photographer
