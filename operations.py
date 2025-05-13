@@ -2,7 +2,7 @@ from sqlmodel import Session, select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from typing import Dict, Any
 from models import PhotographerSQL, PortfolioSQL
-from terms import Genre, PhotographicStyle
+from terms import Genre, PhotographicStyle, Nationality
 
 
 #Creation of one photographer in DB
@@ -60,6 +60,13 @@ async def filter_genre(session:Session, photographer_genre:Genre):
     genre = result.scalars().all()
 
     return genre
+
+#filter by nacionality
+async def filter_nationality(session:Session, photographer_nationality:Nationality):
+    query = (select(PhotographerSQL).where(PhotographerSQL.nationality == photographer_nationality))
+    result = await session.execute(query)
+    nationality = result.scalars().all()
+    return nationality
 
 
 #Creation of one portfolio in DB
