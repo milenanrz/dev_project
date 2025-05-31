@@ -13,6 +13,7 @@ SUPABASE_BUCKET = os.getenv("SUPABASE_BUCKET", "photography")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+
 SAVE_DIRECTORY = "photography_images"
 ALLOWED_EXT = {".jpg", ".jpeg", ".png", ".bmp"}
 
