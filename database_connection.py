@@ -7,6 +7,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
+
 CLEVER_DB=(
     f"postgresql+asyncpg://{os.getenv('CLEVER_USER')}:"
     f"{os.getenv('CLEVER_PASSWORD')}@"
@@ -17,7 +18,8 @@ CLEVER_DB=(
 
 DATABASE_URL= "DATABASE_URL"
 
-engine : AsyncEngine = create_async_engine(CLEVER_DB, echo=True)
+engine : AsyncEngine = create_async_engine(CLEVER_DB, echo=False)
+
 async_session =sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 async def init_db():
