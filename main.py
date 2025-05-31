@@ -11,7 +11,7 @@ from terms import Nationality, PhotographicStyle, Genre
 from database_connection import init_db, get_session
 import operations as crud
 from supabase_connection import upload_img_supabase
-
+from datetime import date
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
@@ -127,7 +127,7 @@ async def add_portfolio_img(
         photographer_name: str = Form(...),
         title: Optional[str] = Form(None),
         category: Optional[PhotographicStyle] = Form(None),
-        photo_created_at:Optional[int] = Form(None),
+        photo_created_at:Optional[date] = Form(None),
         portfolio_image:Optional[UploadFile] = File(None), #new
         session: Session = Depends(get_session)
     ):

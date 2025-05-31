@@ -18,7 +18,7 @@ CLEVER_DB=(
 
 DATABASE_URL= "DATABASE_URL"
 
-engine : AsyncEngine = create_async_engine(CLEVER_DB, echo=False)
+engine : AsyncEngine = create_async_engine(CLEVER_DB, echo=True)
 
 async_session =sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 

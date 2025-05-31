@@ -1,5 +1,5 @@
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, date
 from pydantic import ConfigDict
 from sqlmodel import Field, SQLModel
 from terms import *
@@ -25,7 +25,7 @@ class PortfolioBase(SQLModel):
     photographer_name: Optional[str] = Field(foreign_key="photographers.name")
     title: Optional[str] = Field(min_length=1, max_length=50)
     category: Optional[PhotographicStyle] = Field(default=None)
-    photo_created_at: Optional[int] = Field(default=None)
+    photo_created_at: Optional[date] = Field(default=None)
 
     #new
     portfolio_image_path: Optional[str] = Field(default=None)
