@@ -1,5 +1,6 @@
 from sqlmodel import Session, select
 from sqlmodel.ext.asyncio.session import AsyncSession
+from datetime import datetime
 from typing import Dict, Any
 from models import PhotographerSQL, PortfolioSQL
 from terms import Genre, PhotographicStyle, Nationality
@@ -8,6 +9,7 @@ from terms import Genre, PhotographicStyle, Nationality
 #Creation of one photographer in DB
 async def create_photographer(session: Session, photographer:PhotographerSQL):
     db_photographer = PhotographerSQL.model_validate(photographer, from_attributes=True)
+    db_photographer.created_at = datetime.now() #new
 
     session.add(db_photographer)
     await session.commit()
@@ -37,6 +39,8 @@ async def update_photographer(session:Session, photographer_id:int, photographer
     for key, value in photographer_update.items():
         if value is not None:
             photographer_data[key]=value
+
+    photographer_data["updated_at"] = datetime.now() #new
 
 
     for key, value in photographer_data.items():
@@ -72,6 +76,7 @@ async def filter_nationality(session:Session, photographer_nationality:Nationali
 #Creation of one portfolio in DB
 async def create_portfolio(session: Session, portfolio:PortfolioSQL):
     db_portfolio = PortfolioSQL.model_validate(portfolio, from_attributes=True)
+    db_portfolio.created_at = datetime.now() #new
 
     session.add(db_portfolio)
     await session.commit()
@@ -102,6 +107,7 @@ async def update_portfolio(session:Session, portfolio_id:int, portfolio_update:D
         if value is not None:
             portfolio_data[key]=value
 
+    portfolio_data["updated_at"] = datetime.now()  # new
 
     for key, value in portfolio_data.items():
         setattr(portfolio, key, value)

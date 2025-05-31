@@ -10,6 +10,7 @@ from models import PhotographerSQL, PortfolioSQL
 from terms import Nationality, PhotographicStyle, Genre
 from database_connection import init_db, get_session
 import operations as crud
+from supabase_connection import upload_img_supabase
 
 
 @asynccontextmanager
@@ -18,7 +19,9 @@ async def lifespan(app:FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
-#app.mount("/photographer_images", StaticFiles(directory="photographer_images"), name="photographer_images")
+
+#new
+app.mount("/photography_images", StaticFiles(directory="photography_images"), name="photography_images")
 
 
 @app.get("/")
@@ -38,16 +41,20 @@ async def raise_exception():
 
 #add photographers
 @app.post("/photographers", response_model=PhotographerSQL, tags=["PHOTOGRAPHERS"])
-async def add_photographer_img(name: str = Form(...),
-                      genre: Optional[Genre] = Form(None),
-                      nationality: Optional[Nationality] = Form(None),
-                      photographic_style_name: Optional[PhotographicStyle] = Form(None),
-                      is_alive:Optional[bool] = Form(None),
-                      #photographer_image:Optional[UploadFile] = File(None),
-                      session: Session = Depends(get_session)
-                    ):
+async def add_photographer_img(
+        name: str = Form(...),
+        genre: Optional[Genre] = Form(None),
+        nationality: Optional[Nationality] = Form(None),
+        photographic_style_name: Optional[PhotographicStyle] = Form(None),
+        is_alive:Optional[bool] = Form(None),
+        photographer_image:Optional[UploadFile] = File(None), #new
+        session: Session = Depends(get_session)
+    ):
+    if not photographer_image:
+        raise HTTPException(status_code=400, detail="Debes subir una imagen")
 
-    #image_url = await upload_img_supabase(image)
+    image_url = await upload_img_supabase(photographer_image, subfolder="photographers") #new
+    #print("ok", image_url)
 
     photographer_data=PhotographerSQL(
         name=name,
@@ -55,7 +62,7 @@ async def add_photographer_img(name: str = Form(...),
         nationality=nationality,
         photographic_style_name=photographic_style_name,
         is_alive=is_alive,
-        #image_path=image_url
+        photographer_image_path=image_url #new
     )
     photographer = await crud.create_photographer(session, photographer_data)
     session.add(photographer)
@@ -116,22 +123,26 @@ async def get_photographer_nationality(photographer_nationality:Nationality, ses
 
 #add portfolio
 @app.post("/portfolios", response_model=PortfolioSQL, tags=["PORTFOLIOS"])
-async def add_portfolio_img(photographer_name: str = Form(...),
-                      title: Optional[str] = Form(None),
-                      category: Optional[PhotographicStyle] = Form(None),
-                      created_at:Optional[int] = Form(None),
-                      #photographer_image:Optional[UploadFile] = File(None),
-                      session: Session = Depends(get_session)
-                    ):
+async def add_portfolio_img(
+        photographer_name: str = Form(...),
+        title: Optional[str] = Form(None),
+        category: Optional[PhotographicStyle] = Form(None),
+        photo_created_at:Optional[int] = Form(None),
+        portfolio_image:Optional[UploadFile] = File(None), #new
+        session: Session = Depends(get_session)
+    ):
 
-    #image_url = await upload_img_supabase(image)
+    if not portfolio_image:
+        raise HTTPException(status_code=400, detail="Debe subir una imagen")
+
+    image_url = await upload_img_supabase(portfolio_image, subfolder="portfolios") #new
 
     portfolio_data=PortfolioSQL(
         photographer_name=photographer_name,
         title=title,
         category=category,
-        created_at=created_at,
-        #image_path=image_url
+        photo_created_at=photo_created_at,
+        portfolio_image_path=image_url #new
     )
     portfolio = await crud.create_portfolio(session, portfolio_data)
     session.add(portfolio)
