@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
 CLEVER_DB=(
-    f"postgresql+asyncpg://{os.getenv('CLEVER_USER')}:{os.getenv('CLEVER_PASSWORD')}@{os.getenv('CLEVER_HOST')}:{os.getenv('CLEVER_PORT')}/{os.getenv('CLEVER_DATABASE')}"
+    f"postgresql+asyncpg://{os.getenv('CLEVER_USER')}:{os.getenv('CLEVER_PASSWORD')}@{os.getenv('CLEVER_HOST')}:{os.getenv('CLEVER_PORT','5432')}/{os.getenv('CLEVER_DATABASE')}"
 )
 
 engine : AsyncEngine = create_async_engine(CLEVER_DB, echo=True)
