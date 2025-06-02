@@ -11,6 +11,8 @@ CLEVER_DB=(
     f"postgresql+asyncpg://{os.getenv('CLEVER_USER')}:{os.getenv('CLEVER_PASSWORD')}@{os.getenv('CLEVER_HOST')}:{os.getenv('CLEVER_PORT','5432')}/{os.getenv('CLEVER_DATABASE')}"
 )
 
+#DATABASE_URL = "sqlite+aiosqlite:///database.db"
+
 engine : AsyncEngine = create_async_engine(CLEVER_DB, echo=True)
 async_session =sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 

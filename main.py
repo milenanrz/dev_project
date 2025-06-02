@@ -135,7 +135,7 @@ async def add_portfolio_img(
     if not portfolio_image:
         raise HTTPException(status_code=400, detail="Debe subir una imagen")
 
-    image_url = await upload_img_supabase(portfolio_image, subfolder="portfolios") #new
+    image_url = await upload_img_supabase(portfolio_image, subfolder="photos") #new
 
     portfolio_data=PortfolioSQL(
         photographer_name=photographer_name,

@@ -27,7 +27,7 @@ async def upload_img_supabase(upload_file: UploadFile, subfolder: str = "photogr
     if file_ext not in ALLOWED_EXT:
         raise HTTPException(status_code=400, detail="Tipo de archivo no permitido")
 
-    if subfolder not in {"photographers", "portfolios"}:
+    if subfolder not in {"photographers", "photos"}:
         raise HTTPException(status_code=400, detail="Subcarpeta inválida")
 
     file_name = f"{subfolder}/{uuid.uuid4().hex[:8]}_{upload_file.filename}"
@@ -37,8 +37,7 @@ async def upload_img_supabase(upload_file: UploadFile, subfolder: str = "photogr
         file_name, contents, {"content-type": upload_file.content_type}
     )
 
-    if "error" in response:
-        raise HTTPException(status_code=500, detail="Error al subir a Supabase")
+    print("DEBUG response:", response)
 
     public_url = f"{SUPABASE_URL}/storage/v1/object/public/{SUPABASE_BUCKET}/{file_name}"
     return public_url
