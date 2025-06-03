@@ -7,8 +7,13 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
+
+port = os.getenv('PORT')
+if not port:
+    port = "5432"
+
 DB=(
-    f"postgresql+asyncpg://{os.getenv('USER')}:{os.getenv('PASSWORD')}@{os.getenv('HOST')}:{os.getenv('PORT','5432')}/{os.getenv('DATABASE')}"
+    f"postgresql+asyncpg://{os.getenv('USER')}:{os.getenv('PASSWORD')}@{os.getenv('HOST')}:{port}/{os.getenv('DATABASE')}"
 )
 
 #DATABASE_URL = "sqlite+aiosqlite:///database.db"
