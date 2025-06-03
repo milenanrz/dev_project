@@ -11,7 +11,7 @@ DB=(
     f"postgresql+asyncpg://{os.getenv('USER')}:{os.getenv('PASSWORD')}@{os.getenv('HOST')}:{os.getenv('PORT','5432')}/{os.getenv('DATABASE')}"
 )
 
-DATABASE_URL = "sqlite+aiosqlite:///database.db"
+#DATABASE_URL = "sqlite+aiosqlite:///database.db"
 
 engine : AsyncEngine = create_async_engine(DB, echo=True)
 async_session =sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
