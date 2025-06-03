@@ -22,7 +22,7 @@ class PhotographerSQL(PhotographerBase, table=True):
     model_config = ConfigDict(from_attributes=True)
 
 class PortfolioBase(SQLModel):
-    photographer_name: Optional[str] = Field(foreign_key="photographers.name")
+    photographer_id: Optional[int] = Field(foreign_key="photographers.id")
     title: Optional[str] = Field(min_length=1, max_length=50)
     category: Optional[PhotographicStyle] = Field(default=None)
     photo_created_at: Optional[date] = Field(default=None)
