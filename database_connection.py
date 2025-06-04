@@ -1,4 +1,21 @@
+from sqlmodel import SQLModel, create_engine, Session
 import os
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+engine = create_engine(DATABASE_URL, echo=True)
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+
+# (Opcional) Para crear las tablas
+def init_db():
+    SQLModel.metadata.create_all(engine)
+
+
+
+"""import os
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncEngine
 from sqlmodel import SQLModel
@@ -24,4 +41,4 @@ async def init_db():
 
 async def get_session():
     async with async_session() as session:
-        yield session
+        yield session"""
