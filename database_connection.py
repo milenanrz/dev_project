@@ -8,17 +8,14 @@ from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
 
-port = os.getenv('PORT')
-if not port:
-    port = "5432"
 
-DB=(
+DATABASE_URL=(
     f"postgresql+asyncpg://{os.getenv('USER')}:{os.getenv('PASSWORD')}@{os.getenv('HOST')}:{port}/{os.getenv('DATABASE')}"
 )
 
 #DATABASE_URL = "sqlite+aiosqlite:///database.db"
 
-engine : AsyncEngine = create_async_engine(DB, echo=True)
+engine : AsyncEngine = create_async_engine(DATABASE_URL, echo=True)
 async_session =sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 async def init_db():
